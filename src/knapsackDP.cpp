@@ -19,8 +19,8 @@ KnapsackDP::KnapsackDP(const int& nItems, vector<p>& profits,
   instanceFile = INST_NONE;
 }
 
-KnapsackDP::KnapsackDP(const string& filename)
-    : maximumCapacity(0), numberOfItems(0), instanceFile(filename) {
+KnapsackDP::KnapsackDP(const string& filename, const fs::path& pathToResults)
+    : maximumCapacity(0), numberOfItems(0) {
   ifstream input(filename.c_str());
   if (!input.is_open()) {
     cerr << "Error while opening instance file: " << filename << endl;
@@ -33,7 +33,7 @@ KnapsackDP::KnapsackDP(const string& filename)
   weights.reserve(numberOfItems);
   table.resize(numberOfItems + 1, vector<int>(maximumCapacity + 1, 0.0));
 #ifdef DEBUG
-  cout << "Filename: " << instanceFile << endl;
+  cout << "Filename: " << filename << endl;
   cout << "Number of items: " << numberOfItems << endl;
   cout << "Maximum Capacity: " << maximumCapacity << endl;
 #endif
@@ -43,8 +43,9 @@ KnapsackDP::KnapsackDP(const string& filename)
     profits.push_back(p);
   }
   input.close();
-  instanceFile = instanceFile.substr(instanceFile.find_last_of(ESCAPE) + 1);
-  instanceFile = instanceFile.substr(0, instanceFile.size() - 3);
+  fs::path filenamePath = filename;
+  instanceFile =
+      pathToResults / filenamePath.filename().replace_extension(EXTENSION);
 }
 
 KnapsackDP::~KnapsackDP() {
@@ -79,6 +80,8 @@ results KnapsackDP::run() {
   elapsedCPUTime = (stopCPUTime - startCPUTime) / (double)CLOCKS_PER_SEC;
   chrono::duration<double> WallTime = (stopWallTime - startWallTime);
   elapsedWallTime = WallTime.count();
+  std::cout << "Optimal: " << table[numberOfItems][maximumCapacity]
+            << std::endl;
   std::cout << "Finished in " << std::endl;
   std::cout << "\t- " << elapsedCPUTime << " seconds [CPU Clock]" << std::endl;
   std::cout << "\t- " << elapsedWallTime << " seconds [Wall Clock]"
@@ -92,8 +95,7 @@ results KnapsackDP::run() {
 
 void KnapsackDP::writeResults() {
   // Guardamos los resultados en un fichero
-  string outputFilename = instanceFile + EXTENSION;
-  ofstream outputFile(outputFilename);
+  ofstream outputFile(instanceFile);
   outputFile << table[numberOfItems][maximumCapacity] << endl
              << elapsedWallTime;
   outputFile.close();

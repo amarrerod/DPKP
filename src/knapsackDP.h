@@ -5,12 +5,15 @@
 #include <chrono>
 #include <cmath>
 #include <ctime>
+#include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
+
 using namespace std;
+namespace fs = filesystem;
 
 using optimal = int;
 using elapsedTime = double;
@@ -20,7 +23,7 @@ using results = std::pair<optimal, elapsedTime>;
 
 class KnapsackDP {
  public:
-  KnapsackDP(const string& filename);
+  KnapsackDP(const string& filename, const fs::path& pathToResults);
 
   KnapsackDP(const int& nItems, vector<p>& profits, vector<w>& weights,
              const p& capacity);

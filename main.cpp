@@ -1,20 +1,25 @@
+#include <filesystem>
 #include <iostream>
 #include <string>
 
 #include "src/knapsackDP.h"
 
-const int NUM_ARGS = 2;
+using namespace std;
+namespace fs = filesystem;
+
+const int NUM_ARGS = 3;
 
 int main(int argc, char** argv) {
   if (argc != NUM_ARGS) {
-    cerr << "Error in args. Usage: ./knapsack_exact <instance_file>" << endl;
+    cerr << "Error in args. Usage: ./knapsack_exact <instance_file> "
+            "<path_to_results>"
+         << endl;
     exit(EXIT_FAILURE);
   } else {
     string file = argv[1];
-    KnapsackDP knapsackSolver(file);
+    fs::path pathToResults = argv[2];
+    KnapsackDP knapsackSolver(file, pathToResults);
     results solution = knapsackSolver.run();
-    std::cout << "Optimal: " << solution.first << " in " << solution.second
-              << "\"\n";
   }
   return 0;
 }
