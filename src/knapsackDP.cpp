@@ -38,6 +38,8 @@ KnapsackDP::KnapsackDP(const string& filename, const fs::path& pathToResults)
         profits.push_back(p);
     }
     input.close();
+    // Creamos el directorio de resultados si no existe
+    fs::create_directories(pathToResults);
     fs::path instancePath = filename;
     outputFile = (pathToResults / instancePath.filename().replace_extension(EXTENSION));
 #ifdef DEBUG
@@ -95,8 +97,8 @@ results KnapsackDP::run() {
 
 void KnapsackDP::writeResults() {
     // Guardamos los resultados en un fichero
-    ofstream outputFile(instanceFile);
-    outputFile << table[numberOfItems][maximumCapacity] << endl
-               << elapsedWallTime;
-    outputFile.close();
+    ofstream outStream(outputFile, fstream::out);
+    outStream << table[numberOfItems][maximumCapacity] << endl
+              << elapsedWallTime;
+    outStream.close();
 }
