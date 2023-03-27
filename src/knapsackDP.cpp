@@ -41,7 +41,8 @@ KnapsackDP::KnapsackDP(const string& filename, const fs::path& pathToResults)
     // Creamos el directorio de resultados si no existe
     fs::create_directories(pathToResults);
     fs::path instancePath = filename;
-    outputFile = (pathToResults / instancePath.filename().replace_extension(EXTENSION));
+    outputFile =
+        (pathToResults / instancePath.filename().replace_extension(EXTENSION));
 #ifdef DEBUG
     cout << "Filename: " << filename << endl;
     cout << "Output file: " << outputFile << endl;
@@ -69,8 +70,9 @@ results KnapsackDP::run() {
                 table[i][j] = 0;
             } else {
                 if (weights[i - 1] <= j) {
-                    table[i][j] = max(profits[i - 1] + table[i - 1][j - weights[i - 1]],
-                                      table[i - 1][j]);
+                    table[i][j] =
+                        max(profits[i - 1] + table[i - 1][j - weights[i - 1]],
+                            table[i - 1][j]);
                 } else {
                     table[i][j] = table[i - 1][j];
                 }
@@ -85,7 +87,8 @@ results KnapsackDP::run() {
     std::cout << "Optimal: " << table[numberOfItems][maximumCapacity]
               << std::endl;
     std::cout << "Finished in " << std::endl;
-    std::cout << "\t- " << elapsedCPUTime << " seconds [CPU Clock]" << std::endl;
+    std::cout << "\t- " << elapsedCPUTime << " seconds [CPU Clock]"
+              << std::endl;
     std::cout << "\t- " << elapsedWallTime << " seconds [Wall Clock]"
               << std::endl;
 
